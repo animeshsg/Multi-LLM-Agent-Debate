@@ -19,13 +19,19 @@ class TextFileTransformer(BaseEstimator, TransformerMixin):
         # The fit method is typically used for parameter tuning in transformers.
         return self
 
-    def transform(self):
+    def transform(self,X):
         print("1. Reading File into Dataframe")
         self.data=self.read_file()
         print("2. Calculating pairwise Bert Metrics")
         self.data=self.calculate_pairwise_bert_score()
+
+        print("Calculate bert score wrt seed prompt")
+        self.data=self.calculate_seed_bert_score()
+
         print("3. Calculating Perplexity Score Metrics")
         self.data=self.calculate_perplexity_score()
+
+
         print("4. Calculating aspect based Sentiments Metrics")
         absa=Absa(self.data)
         self.data=absa.get_absa()
@@ -93,6 +99,31 @@ class TextFileTransformer(BaseEstimator, TransformerMixin):
             self.data.loc[self.data.index[i], 'Recall'] = recall
             self.data.loc[self.data.index[i], 'F1_Score'] = f1_score
         return self.data
+    
+    def calculate_seed_bert_score(self):
+        self.data['Precision_Seed'] = 0.0
+        self.data['Recall_Seed'] = 0.0
+        self.data['F1_Score_Seed'] = 0.0
+
+        # Iterate through each pair of adjacent dialogues to calculate and store similarity scores
+        for i in range(3, len(self.data)):  # Iterate up to the second-to-last row
+            if i%2 == 1:
+                candidate_dialogue = self.data.at[i, 'Dialogue']
+                reference_dialogue = self.data.at[1, 'Dialogue']
+            else:
+                candidate_dialogue = self.data.at[i, 'Dialogue']
+                reference_dialogue = self.data.at[2, 'Dialogue']
+
+            # Calculate similarity scores
+            precision, recall, f1_score = get_bertscore(candidate_dialogue, reference_dialogue)
+            #print(precision,recall,f1_score)
+
+            # Store the scores in the DataFrame
+            self.data.loc[self.data.index[i], 'Precision_Seed'] = precision
+            self.data.loc[self.data.index[i], 'Recall_Seed'] = recall
+            self.data.loc[self.data.index[i], 'F1_Score_Seed'] = f1_score
+        return self.data
+
 
 # # Example usage:
 # file_path = 'your_file.txt'  # Replace with the actual file path

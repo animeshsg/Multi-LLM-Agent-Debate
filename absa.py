@@ -35,6 +35,7 @@ class Absa():
         self.data=data
     
     def get_topics(self):
+        # breakpoint()
         convs=self.data.Dialogue.to_list()
         corpus_embeddings = self.model_embedding.encode(convs)
         self.topic_model=self.topic_model.fit(convs,corpus_embeddings)
