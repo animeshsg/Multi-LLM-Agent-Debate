@@ -62,7 +62,7 @@ class TextFileTransformer(BaseEstimator, TransformerMixin):
                 return df
 
         except FileNotFoundError:
-            print(f"Error: File '{file_path}' not found.")
+            print(f"Error: File '{self.file_path}' not found.")
             return None
         except Exception as e:
             print(f"Error: {e}")
