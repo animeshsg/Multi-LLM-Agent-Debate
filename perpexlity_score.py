@@ -4,6 +4,10 @@ import numpy as np
 
 
 class perplexity_score:
+    '''
+    Input : String of text or sentence
+    Output : perplexity score
+    '''
     def __init__(self):
         self.model_name = 'cointegrated/rubert-tiny'
         self.model = AutoModelForMaskedLM.from_pretrained(self.model_name)

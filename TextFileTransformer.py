@@ -5,7 +5,13 @@ from perpexlity_score import perplexity_score
 from absa import Absa
 
 class TextFileTransformer(BaseEstimator, TransformerMixin):
+    '''
+    Input - Text file of conversation with separator of #### between each dialogue
+    Output - Pandas Dataframe with metric 
+    '''
+
     def __init__(self, file_path):
+
         self.file_path = file_path
         self.data = None
 

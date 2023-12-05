@@ -15,6 +15,7 @@ class Absa():
     def __init__(self,data):
 
         # bertopic Tokenizers and model params and init
+        
         self.vectorizer_model = CountVectorizer(stop_words="english")
         self.topic_model = BERTopic(
                             n_gram_range=(1, 2),
