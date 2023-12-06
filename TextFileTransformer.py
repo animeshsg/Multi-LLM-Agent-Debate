@@ -48,7 +48,8 @@ class TextFileTransformer(BaseEstimator, TransformerMixin):
                 file_content = file.read()
 
                 # Separate the file into chunks using the keyword "#####"
-                separated_chunks = file_content.split('#####')
+                separated_chunks = file_content.split('#####')[:-1]
+
 
                 # Remove whitespaces and new line characters from each element
                 cleaned_chunks = [chunk.strip() for chunk in separated_chunks]

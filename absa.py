@@ -46,6 +46,8 @@ class Absa():
         doc_info=self.topic_model.get_document_info(convs)
         doc_info=doc_info[['Document','Representation']]
         doc_info = doc_info.rename(columns={'Document': 'Dialogue'})
+        #print(self.topic_model.get_topic_info()['Representation'][0])
+        doc_info['FreqTopic']=doc_info.apply(lambda row: self.topic_model.get_topic_info()['Representation'][0], axis=1)
         self.data=pd.merge(self.data,doc_info,on="Dialogue",how="inner")
         return self.data
     
@@ -65,10 +67,29 @@ class Absa():
             sentiment_aspect[aspect] = (self.absa_model.config.id2label[label_id], scores[label_id].item())
 
         return sentiment_aspect
+    
+    def get_top_aspect_scores(self,row):
+        #Get sentiment scores given a text and its aspect list
+        text=row['Dialogue']
+        aspect_list=row['FreqTopic']
+        sentiment_aspect = {}
+        for aspect in aspect_list:
+            inputs = self.absa_tokenizer(text, aspect, return_tensors="pt")
+
+            with torch.inference_mode():
+                outputs = self.absa_model(**inputs)
+
+            scores = F.softmax(outputs.logits[0], dim=-1)
+            label_id = torch.argmax(scores).item()
+            sentiment_aspect[aspect] = (self.absa_model.config.id2label[label_id], scores[label_id].item())
+
+        return sentiment_aspect
 
     def get_absa(self):
         #  Main Function to get the absa sentiment scores 
         self.data=self.get_topics()
-        self.data['sentiment_scores'] = self.data.apply(self.get_aspect_scores, axis=1)
-        self.data = self.data.drop(['Representation'], axis=1)
+        #print(self.data.columns)
+        self.data['SentimentScores'] = self.data.apply(self.get_aspect_scores, axis=1)
+        self.data['TopSentimentScores'] = self.data.apply(self.get_top_aspect_scores, axis=1)
+        self.data = self.data.drop(['Representation','FreqTopic'], axis=1)
         return self.data
