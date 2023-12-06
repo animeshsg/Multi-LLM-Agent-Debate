@@ -81,8 +81,6 @@ class TextFileTransformer(BaseEstimator, TransformerMixin):
     
     def calculate_pairwise_bert_score(self):
         # Create new columns to store similarity scores
-        self.data['Precision'] = 0.0
-        self.data['Recall'] = 0.0
         self.data['F1_Score'] = 0.0
 
         # Iterate through each pair of adjacent dialogues to calculate and store similarity scores
@@ -95,14 +93,11 @@ class TextFileTransformer(BaseEstimator, TransformerMixin):
             #print(precision,recall,f1_score)
 
             # Store the scores in the DataFrame
-            self.data.loc[self.data.index[i], 'Precision'] = precision
-            self.data.loc[self.data.index[i], 'Recall'] = recall
             self.data.loc[self.data.index[i], 'F1_Score'] = f1_score
         return self.data
     
     def calculate_seed_bert_score(self):
-        self.data['Precision_Seed'] = 0.0
-        self.data['Recall_Seed'] = 0.0
+
         self.data['F1_Score_Seed'] = 0.0
 
         # Iterate through each pair of adjacent dialogues to calculate and store similarity scores
@@ -119,8 +114,6 @@ class TextFileTransformer(BaseEstimator, TransformerMixin):
             #print(precision,recall,f1_score)
 
             # Store the scores in the DataFrame
-            self.data.loc[self.data.index[i], 'Precision_Seed'] = precision
-            self.data.loc[self.data.index[i], 'Recall_Seed'] = recall
             self.data.loc[self.data.index[i], 'F1_Score_Seed'] = f1_score
         return self.data
 
