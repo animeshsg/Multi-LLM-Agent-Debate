@@ -77,7 +77,7 @@ questions = ["The death penalty is a punishment that fits the crime of murder.Ex
 repo_id1 = "meta-llama/Llama-2-7b-chat-hf"
 repo_id2 = "meta-llama/Llama-2-7b-chat-hf"
 
-epochs = 100
+epochs = 20
 
 for i in range(len(questions)):
     question = questions[i]
@@ -95,6 +95,6 @@ Response from left leaning lawyer: {opinion}
 
 Your response:  """
 
-    op_file = 'response_new' + str(i) + '.txt'
+    op_file = 'response_20_' + str(i) + '.txt'
     model = Conversation(repo_id1=repo_id1, repo_id2=repo_id2, question=question, template1=template1, template2=template2, op_file=op_file, temperature=0.7, epochs=epochs)
     model.converse()
