@@ -2,8 +2,11 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def create_sentiment_heatmap(df,agent):
+def create_sentiment_heatmap(df,agent,path):
+    
     # Assuming your DataFrame has a column named 'TopSentimentScores'
+
+
     if type(df['TopSentimentScores'][0]) is str:
         df['TopSentimentScores']=df['TopSentimentScores'].apply(eval)
     # Create a new DataFrame with columns 'Index', 'Topic', 'SentimentType', and 'SentimentScore'
@@ -27,9 +30,11 @@ def create_sentiment_heatmap(df,agent):
     # Create a heatmap
     plt.figure(figsize=(10, 8))
     sns.heatmap(heatmap_data,
-                cmap="coolwarm", annot=True,linewidths=0.01)
-    plt.title('Sentiment Heatmap')
+                cmap="coolwarm", annot=False,linewidths=0.01)
+    plt.title(agent+'Sentiment Heatmap')
+    plt.savefig(path)
     plt.show()
+    plt.close()
 
 # Example usage with your DataFrame
 # create_sentiment_heatmap(your_dataframe)

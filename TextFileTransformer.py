@@ -20,6 +20,10 @@ class TextFileTransformer(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self,X):
+        '''
+        Input : X as None Always
+        Output : Dataframe with conversation and evaluation scores
+        '''
         print("1. Reading File into Dataframe")
         self.data=self.read_file()
         print("2. Calculating pairwise Bert Metrics")
@@ -31,10 +35,9 @@ class TextFileTransformer(BaseEstimator, TransformerMixin):
         print("3. Calculating Perplexity Score Metrics")
         self.data=self.calculate_perplexity_score()
 
-
-        # print("4. Calculating aspect based Sentiments Metrics")
-        # absa=Absa(self.data)
-        # self.data=absa.get_absa()
+        print("4. Calculating aspect based Sentiments Metrics")
+        absa=Absa(self.data)
+        self.data=absa.get_absa()
         return self.data
 
     def read_file(self):
