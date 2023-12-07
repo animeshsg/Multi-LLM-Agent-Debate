@@ -10,6 +10,7 @@ import torch
 import torch.nn.functional as F
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.cluster import KMeans
 
 class Absa():
     def __init__(self,data):
@@ -17,9 +18,11 @@ class Absa():
         # bertopic Tokenizers and model params and init
         
         self.vectorizer_model = CountVectorizer(stop_words="english")
+        self.cluster_model = KMeans(n_clusters=2)
         self.topic_model = BERTopic(
                             n_gram_range=(1, 2),
                             vectorizer_model=self.vectorizer_model,
+                            hdbscan_model=self.cluster_model,
                             nr_topics='auto',
                             min_topic_size=5,
                             top_n_words=5,
@@ -40,8 +43,8 @@ class Absa():
         corpus_embeddings = self.model_embedding.encode(convs)
         self.topic_model=self.topic_model.fit(convs,corpus_embeddings)
         topics, probabilities = self.topic_model.transform(convs, corpus_embeddings)
-        new_topics = self.topic_model.reduce_outliers(convs, topics, strategy="c-tf-idf")
-        self.topic_model.update_topics(convs, topics=new_topics, vectorizer_model=self.vectorizer_model)
+        # new_topics = self.topic_model.reduce_outliers(convs, topics, strategy="c-tf-idf")
+        # self.topic_model.update_topics(convs, topics=new_topics, vectorizer_model=self.vectorizer_model)
         print(self.topic_model.get_topic_freq())
         doc_info=self.topic_model.get_document_info(convs)
         doc_info=doc_info[['Document','Representation']]
