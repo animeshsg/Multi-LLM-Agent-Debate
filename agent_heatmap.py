@@ -30,7 +30,7 @@ def create_sentiment_heatmap(df,agent,path):
     # Create a heatmap
     plt.figure(figsize=(10, 8))
     sns.heatmap(heatmap_data,
-                cmap="coolwarm", annot=False,linewidths=0.01)
+                cmap="coolwarm", annot=True,linewidths=0.01,annot_kws={'rotation': 90})
     plt.title(agent+'Sentiment Heatmap')
     plt.savefig(path)
     plt.show()
