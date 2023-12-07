@@ -25,16 +25,16 @@ class TextFileTransformer(BaseEstimator, TransformerMixin):
         print("2. Calculating pairwise Bert Metrics")
         self.data=self.calculate_pairwise_bert_score()
 
-        print("Calculate bert score wrt seed prompt")
+        print("2.5 Calculate bert score wrt seed prompt")
         self.data=self.calculate_seed_bert_score()
 
         print("3. Calculating Perplexity Score Metrics")
         self.data=self.calculate_perplexity_score()
 
 
-        print("4. Calculating aspect based Sentiments Metrics")
-        absa=Absa(self.data)
-        self.data=absa.get_absa()
+        # print("4. Calculating aspect based Sentiments Metrics")
+        # absa=Absa(self.data)
+        # self.data=absa.get_absa()
         return self.data
 
     def read_file(self):
