@@ -30,8 +30,8 @@ def get_bertscore_fit(df_result):
     return slope1, slope2
 
 def get_bertscore_summary(df_result):
-    agent1_mean=df_result[df_result['Character'].eq("Agent1")].F1_Score_Seed.mean()
-    agent2_mean=df_result[df_result['Character'].eq("Agent2")].F1_Score_Seed.mean()
+    agent1_mean=df_result[df_result['Character'].eq("Agent1")].F1_Score.mean()
+    agent2_mean=df_result[df_result['Character'].eq("Agent2")].F1_Score.mean()
     agent1_mean_perplexity=df_result[df_result['Character'].eq("Agent1")].Perplexity.mean()
     agent2_mean_perplexity=df_result[df_result['Character'].eq("Agent2")].Perplexity.mean()
     return agent1_mean,agent2_mean,agent1_mean_perplexity,agent2_mean_perplexity
